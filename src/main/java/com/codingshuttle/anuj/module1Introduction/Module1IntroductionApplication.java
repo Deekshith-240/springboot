@@ -1,31 +1,46 @@
 package com.codingshuttle.anuj.module1Introduction;
 
+import com.codingshuttle.anuj.module1Introduction.impl.EmailNotificationService;
+import com.codingshuttle.anuj.module1Introduction.impl.SmsNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @SpringBootApplication
 public class Module1IntroductionApplication implements CommandLineRunner {
 
-    @Autowired
-    PaymentService paymentServiceObj1;
+//    @Autowired
+//    final NotificationService notificationServiceObj; //dependency injection
+//
+//    public Module1IntroductionApplication(NotificationService notificationServiceObj) {
+//        this.notificationServiceObj = notificationServiceObj; // constructor DI/// Preferred
+//    }
+
+//    public void setNotificationServiceObj(NotificationService notificationServiceObj) {
+//        this.notificationServiceObj = notificationServiceObj;
+//    }
 
     @Autowired
-    PaymentService paymentServiceObj2;
+    Map<String, NotificationService> notificationServiceMap = new LinkedHashMap<>();
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 		SpringApplication.run(Module1IntroductionApplication.class, args);
 	}
 
     @Override
     public void run(String... args) throws Exception {
+//        notificationServiceObj  = new SmsNotificationService();
+//        notificationServiceObj.send("hello");
 
-        System.out.println(paymentServiceObj1.hashCode());
-        System.out.println(paymentServiceObj2.hashCode());
-
-        paymentServiceObj1.pay();
-        paymentServiceObj2.pay();
-
+        for (var notificationService: notificationServiceMap.entrySet()) {
+            System.out.println(notificationService.getKey());
+            notificationService.getValue().send("Hello");
+        }
     }
 }
